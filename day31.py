@@ -1,0 +1,109 @@
+from typing import List
+
+class Solution:
+    def rotateGrid(self, grid: List[List[int]], k: int) -> List[List[int]]:
+        m = len(grid)
+        n = len(grid[0])
+
+        layers = min(m, n) // 2
+
+        for layer in range(layers):
+
+            vals = []
+
+            top = layer
+            left = layer
+
+            bottom = m - layer - 1
+            right = n - layer - 1
+
+            # top row
+            for j in range(left, right + 1):
+                vals.append(grid[top][j])
+
+            # right column
+            for i in range(top + 1, bottom):
+                vals.append(grid[i][right])
+
+            # bottom row
+            for j in range(right, left - 1, -1):
+                vals.append(grid[bottom][j])
+
+            # left column
+            for i in range(bottom - 1, top, -1):
+                vals.append(grid[i][left])
+
+            sz = len(vals)
+
+            idx = k % sz
+
+            # top row
+            for j in range(left, right + 1):
+
+                grid[top][j] = vals[idx]
+
+                idx += 1
+
+                if idx == sz:
+                    idx = 0
+
+            # right column
+            for i in range(top + 1, bottom):
+
+                grid[i][right] = vals[idx]
+
+                idx += 1
+
+                if idx == sz:
+                    idx = 0
+
+            # bottom row
+            for j in range(right, left - 1, -1):
+
+                grid[bottom][j] = vals[idx]
+
+                idx += 1
+
+                if idx == sz:
+                    idx = 0
+
+            # left column
+            for i in range(bottom - 1, top, -1):
+
+                grid[i][left] = vals[idx]
+
+                idx += 1
+
+                if idx == sz:
+                    idx = 0
+
+        return grid
+
+
+# -------- USER INPUT --------
+
+m = int(input("Enter number of rows: "))
+n = int(input("Enter number of columns: "))
+
+grid = []
+
+print("Enter matrix values row by row:")
+
+for i in range(m):
+    row = list(map(int, input().split()))
+    grid.append(row)
+
+k = int(input("Enter rotation value k: "))
+
+# -------- FUNCTION CALL --------
+
+obj = Solution()
+
+result = obj.rotateGrid(grid, k)
+
+# -------- OUTPUT --------
+
+print("Rotated Grid:")
+
+for row in result:
+    print(*row)
